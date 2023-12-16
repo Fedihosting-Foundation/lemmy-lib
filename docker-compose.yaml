@@ -1,0 +1,9 @@
+version: '3.7'
+services:
+  app_name_here:
+    #env_file: .env
+    #image: xxx:latest
+    build:
+      context: .
+    entrypoint: [ "python3", "app_name_here" ]
+
