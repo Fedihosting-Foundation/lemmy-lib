@@ -16,7 +16,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-lemmylib = "lemmy-lib.__main__:main"
+lemmy-lib = "lemmy-lib.__main__:main"
 
 
 ######### BUILD TOOLING BELOW, IMPORTANT STUFF ABOVE ######################
