@@ -35,10 +35,12 @@ class LemmyLib:
         if jwt is not None:
             self.set_jwt(jwt)
 
-    def get_session(self):
+    def get_session(self, other_headers: None | dict = None):
+        if other_headers is None:
+            other_headers = {}
         session = requests.Session()
         session.cookies.set('jwt', self.get_jwt())
-        session.headers.update(self.get_headers())
+        session.headers.update({**self.get_headers(), **other_headers})
         return session
 
     def call_api(self, method: LemmyApiMethod, endpoint: str, params: dict = None, headers: dict = None,
