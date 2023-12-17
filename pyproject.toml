@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "appnamehere"
-version = "0.1.0"
+version = "0.0.1a"
 description = ""
 authors = ["Rooki <rooki@rooki.xyz>"]
 readme = "README.md"
