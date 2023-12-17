@@ -55,7 +55,7 @@ class LemmyLib:
                 if value is None:
                     params.pop(key)
                 if isinstance(value, bool):
-                    data[key] = str(value).lower()
+                    params[key] = str(value).lower()
 
         if data is None:
             data = {}
