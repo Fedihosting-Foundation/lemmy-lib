@@ -127,7 +127,7 @@ class LemmyLib:
 
     def login(self, username: str, password: str, totp: str | None = None, only_jwt: bool = False):
         self._logger.debug("LemmyLib login")
-        response = self.call_api(LemmyApiMethod.POST, 'login',
+        response = self.call_api(LemmyApiMethod.POST, 'user/login',
                                  data={'username_or_email': username, 'password': password, 'totp_2fa_token': totp})
 
         if not only_jwt:
