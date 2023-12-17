@@ -82,8 +82,10 @@ class LemmyLib:
         if response.ok:
             return response
         else:
-            raise Exception(
-                f"LemmyLib: API call failed with status code {response.status_code} and message {response.text}")
+            self._logger.error(f"LemmyLib call_api: "
+                               f"{method} {url}"
+                               f"{response.status_code} {response.text}")
+            return None
 
     def get_base_path(self):
         return f'/api/{API_VERSION}/'
