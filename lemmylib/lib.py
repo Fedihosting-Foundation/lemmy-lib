@@ -35,6 +35,12 @@ class LemmyLib:
         if jwt is not None:
             self.set_jwt(jwt)
 
+    def get_session(self):
+        session = requests.Session()
+        session.cookies.set('jwt', self.get_jwt())
+        session.headers.update(self.get_headers())
+        return session
+
     def call_api(self, method: LemmyApiMethod, endpoint: str, params: dict = None, headers: dict = None,
                  data: dict = None):
         self._logger.debug("LemmyLib call_api")
@@ -50,17 +56,17 @@ class LemmyLib:
         url = f'{self._url}{self.get_base_path()}{endpoint}'
 
         self._logger.debug(f"LemmyLib call_api: {method} {url} {params} {headers} {data}")
-
-        if method == LemmyApiMethod.GET:
-            response = requests.get(url, params=params, headers=headers)
-        elif method == LemmyApiMethod.POST:
-            response = requests.post(url, params=params, headers=headers, json=data)
-        elif method == LemmyApiMethod.PUT:
-            response = requests.put(url, params=params, headers=headers, json=data)
-        elif method == LemmyApiMethod.DELETE:
-            response = requests.delete(url, params=params, headers=headers)
-        else:
-            raise Exception("LemmyLib: Unknown method")
+        with self.get_session() as session:
+            if method == LemmyApiMethod.GET:
+                response = session.get(url, params=params, headers=headers)
+            elif method == LemmyApiMethod.POST:
+                response = session.post(url, params=params, headers=headers, json=data)
+            elif method == LemmyApiMethod.PUT:
+                response = session.put(url, params=params, headers=headers, json=data)
+            elif method == LemmyApiMethod.DELETE:
+                response = session.delete(url, params=params, headers=headers)
+            else:
+                raise Exception("LemmyLib: Unknown method")
 
         self._logger.debug(f"LemmyLib call_api: {response.status_code} {response.text}")
 
@@ -114,7 +120,8 @@ class LemmyLib:
     def list_registration_applications(self, page: int = 1, unread_only: bool = False):
         self._logger.debug("LemmyLib list_registration_applications")
 
-        return self.call_api(LemmyApiMethod.GET, 'applications', params={'page': page, 'unread_only': unread_only})
+        return self.call_api(LemmyApiMethod.GET, 'admin/registration_application/list',
+                             params={'page': page, 'unread_only': unread_only})
 
     def approve_registration_application(self, application_id: int, approve: bool = True,
                                          deny_reason: str | None = None):
