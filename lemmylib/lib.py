@@ -86,7 +86,7 @@ class LemmyLib:
 
         self._logger.debug(f"LemmyLib call_api: {response.status_code} {response.text}")
 
-        if response.status_code == 200:
+        if response.ok:
             return response
         else:
             raise Exception(
