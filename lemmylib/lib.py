@@ -50,8 +50,22 @@ class LemmyLib:
             headers = self.get_headers()
         if params is None:
             params = {}
+        else:
+            for key, value in params.items():
+                if value is None:
+                    params.pop(key)
+                if isinstance(value, bool):
+                    data[key] = str(value).lower()
+
         if data is None:
             data = {}
+        else:
+            for key, value in data.items():
+                if value is None:
+                    data.pop(key)
+                if isinstance(value, bool):
+                    data[key] = str(value).lower()
+
         if self._url is None:
             raise Exception("LemmyLib: URL not set")
 
