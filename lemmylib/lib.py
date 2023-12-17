@@ -52,10 +52,12 @@ class LemmyLib:
             params = {}
         else:
             for key, value in params.items():
+                print(value)
+                print(type(value))
                 if value is None:
                     params.pop(key)
                 if isinstance(value, bool):
-                    params[key] = str(value).lower()
+                    params[key] = str(value)
 
         if data is None:
             data = {}
@@ -64,7 +66,7 @@ class LemmyLib:
                 if value is None:
                     data.pop(key)
                 if isinstance(value, bool):
-                    data[key] = str(value).lower()
+                    data[key] = str(value)
 
         if self._url is None:
             raise Exception("LemmyLib: URL not set")
