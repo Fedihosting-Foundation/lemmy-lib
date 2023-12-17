@@ -51,7 +51,7 @@ class LemmyLib:
         if params is None:
             params = {}
         else:
-            for key, value in params.items():
+            for key, value in params.copy().items():
                 print(value)
                 print(type(value))
                 if value is None:
@@ -62,7 +62,7 @@ class LemmyLib:
         if data is None:
             data = {}
         else:
-            for key, value in data.items():
+            for key, value in data.copy().items():
                 if value is None:
                     data.pop(key)
                 if isinstance(value, bool):
