@@ -174,3 +174,7 @@ class LemmyLib:
 
         return self.call_api(LemmyApiMethod.POST, f'person/remove',
                              data={'reason': reason, 'person_id': person_id, 'removed': removed})
+
+
+if __name__ == '__main__':
+    print("This is a library, not a script.")
