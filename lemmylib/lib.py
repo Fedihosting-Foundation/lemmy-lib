@@ -58,15 +58,15 @@ class LemmyLib:
         url = f'{self._url}{self.get_base_path()}{endpoint}'
 
         self._logger.debug(f"LemmyLib call_api: {method} {url} {params} {headers} {data}")
-        with self.get_session() as session:
+        with self.get_session(headers) as session:
             if method == LemmyApiMethod.GET:
-                response = session.get(url, params=params, headers=headers)
+                response = session.get(url, params=params)
             elif method == LemmyApiMethod.POST:
-                response = session.post(url, params=params, headers=headers, json=data)
+                response = session.post(url, params=params, json=data)
             elif method == LemmyApiMethod.PUT:
-                response = session.put(url, params=params, headers=headers, json=data)
+                response = session.put(url, params=params, json=data)
             elif method == LemmyApiMethod.DELETE:
-                response = session.delete(url, params=params, headers=headers)
+                response = session.delete(url, params=params)
             else:
                 raise Exception("LemmyLib: Unknown method")
 
