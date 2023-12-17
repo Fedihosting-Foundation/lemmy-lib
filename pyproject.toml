@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "appnamehere"
+name = "lemmy-lib"
 version = "0.0.1a"
 description = ""
 authors = ["Rooki <rooki@rooki.xyz>"]
