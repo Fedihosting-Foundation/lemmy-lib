@@ -2,12 +2,13 @@
 name = "appnamehere"
 version = "0.1.0"
 description = ""
-authors = ["Jesse Schoepfer <jelloeater@gmail.com>"]
+authors = ["Rooki <rooki@rooki.xyz>"]
 readme = "README.md"
-packages = [{include = "app_name_here"}]
+packages = [{include = "lemmy-lib"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
+requests = "^2.31.0"
 
 
 [build-system]
@@ -15,7 +16,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-cfiplistupdater = "app_name_here.__main__:main"
+lemmylib = "lemmy-lib.__main__:main"
 
 
 ######### BUILD TOOLING BELOW, IMPORTANT STUFF ABOVE ######################
