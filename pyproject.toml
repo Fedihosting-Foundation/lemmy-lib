@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "lemmy-lib"
+name = "lemmylib"
 version = "0.0.2a"
 description = ""
 authors = ["Rooki <rooki@rooki.xyz>"]
 readme = "README.md"
-packages = [{include = "lemmy-lib"}]
+packages = [{include = "lemmylib"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
