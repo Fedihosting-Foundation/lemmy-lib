@@ -157,19 +157,19 @@ class LemmyLib:
 
         return self.call_api(LemmyApiMethod.GET, f'comment', params={'id': comment_id})
 
-    def remove_post(self, post_id: int, removed: bool = True, reason: str | None = None):
+    def remove_post(self, post_id: int, reason: str | None = None, removed: bool = True):
         self._logger.debug("LemmyLib remove_post")
 
         return self.call_api(LemmyApiMethod.POST, f'post/remove',
                              data={'reason': reason, 'post_id': post_id, 'removed': removed})
 
-    def remove_comment(self, comment_id: int, removed: bool = True, reason: str | None = None):
+    def remove_comment(self, comment_id: int, reason: str | None = None, removed: bool = True):
         self._logger.debug("LemmyLib remove_comment")
 
         return self.call_api(LemmyApiMethod.POST, f'comment/remove',
                              data={'reason': reason, 'comment_id': comment_id, 'removed': removed})
 
-    def remove_person(self, person_id: int, removed: bool = True, reason: str | None = None):
+    def remove_person(self, person_id: int, reason: str | None = None, removed: bool = True):
         self._logger.debug("LemmyLib remove_person")
 
         return self.call_api(LemmyApiMethod.POST, f'person/remove',
