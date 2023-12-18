@@ -201,14 +201,15 @@ class LemmyLib:
         if post_id is None and community_id is None and community_name is None and user_id is None and user_name is None:
             raise Exception("LemmyLib: Either post_id, community_id, community_name, user_id or user_name must be set")
 
-        return self.call_api(LemmyApiMethod.GET, f'comments', params={'page': page, 'post_id': post_id, 'sort': sort,
-                                                                      'type_': listing_type.value,
-                                                                      'parent_id': parent_id,
-                                                                      'community_id': community_id,
-                                                                      'community_name': community_name,
-                                                                      'user_id': user_id,
-                                                                      'user_name': user_name,
-                                                                      'saved_only': saved_only})
+        return self.call_api(LemmyApiMethod.GET, f'comments',
+                             params={'page': page, 'post_id': post_id, 'sort': sort.value,
+                                     'type_': listing_type.value,
+                                     'parent_id': parent_id,
+                                     'community_id': community_id,
+                                     'community_name': community_name,
+                                     'user_id': user_id,
+                                     'user_name': user_name,
+                                     'saved_only': saved_only})
 
     def list_posts(self,
                    page: int | None = None, page_cursor: int | None = None, sort: LemmyPostSort = None,
@@ -219,7 +220,7 @@ class LemmyLib:
         self._logger.debug("LemmyLib list_posts")
 
         return self.call_api(LemmyApiMethod.GET, f'posts',
-                             params={'page_cursor': page_cursor, 'sort': sort, 'type_': listing_type.value,
+                             params={'page_cursor': page_cursor, 'sort': sort.value, 'type_': listing_type.value,
                                      'community_id': community_id,
                                      'page': page,
                                      'community_name': community_name,
