@@ -202,7 +202,7 @@ class LemmyLib:
             raise Exception("LemmyLib: Either post_id, community_id, community_name, user_id or user_name must be set")
 
         return self.call_api(LemmyApiMethod.GET, f'comments', params={'page': page, 'post_id': post_id, 'sort': sort,
-                                                                      'type_': listing_type,
+                                                                      'type_': listing_type.value,
                                                                       'parent_id': parent_id,
                                                                       'community_id': community_id,
                                                                       'community_name': community_name,
@@ -219,7 +219,7 @@ class LemmyLib:
         self._logger.debug("LemmyLib list_posts")
 
         return self.call_api(LemmyApiMethod.GET, f'posts',
-                             params={'page_cursor': page_cursor, 'sort': sort, 'type_': listing_type,
+                             params={'page_cursor': page_cursor, 'sort': sort, 'type_': listing_type.value,
                                      'community_id': community_id,
                                      'page': page,
                                      'community_name': community_name,
