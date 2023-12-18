@@ -17,6 +17,23 @@ class LemmyApiMethod(Enum):
     DELETE = 'DELETE'
 
 
+class LemmyPostSort(Enum):
+    HOT = 'Hot'
+    ACTIVE = 'Active'
+    NEW = 'New'
+    OLD = 'Old'
+    TOP = 'Top'
+    CONTROVERSIAL = 'Controversial'
+    MOSTCOMMENTS = 'MostComments'
+    NEWCOMMENTS = 'NewComments'
+
+
+class LemmyListingType(Enum):
+    ALL = 'All'
+    LOCAL = 'Local'
+    SUBSCRIBED = 'Subscribed'
+
+
 API_VERSION = "v3"
 
 
@@ -175,6 +192,34 @@ class LemmyLib:
 
         return self.call_api(LemmyApiMethod.GET, f'comment', params={'id': comment_id})
 
+    def list_comments(self, page: int = 1, post_id: int | None = None, sort: LemmyPostSort = None,
+                      listing_type: LemmyListingType = None, parent_id: int | None = None,
+                      community_id: int | None = None, community_name: str | None = None, user_id: int | None = None,
+                      user_name: str | None = None, saved_only: bool = False):
+        self._logger.debug("LemmyLib list_comments")
+
+        if post_id is None and community_id is None and community_name is None and user_id is None and user_name is None:
+            raise Exception("LemmyLib: Either post_id, community_id, community_name, user_id or user_name must be set")
+
+        return self.call_api(LemmyApiMethod.GET, f'comments', params={'page': page, 'post_id': post_id, 'sort': sort,
+                                                                      'type_': listing_type,
+
+    def get_person(self, person_id: int | None = None, username: str | None = None):
+        self._logger.debug("LemmyLib get_person")
+
+        if person_id is None and username is None:
+            raise Exception("LemmyLib: Either person_id or username must be set")
+
+        return self.call_api(LemmyApiMethod.GET, f'person', params={'person_id': person_id, 'username': username})
+
+    def get_community(self, community_id: int | None = None, name: str | None = None):
+        self._logger.debug("LemmyLib get_community")
+
+        if community_id is None and name is None:
+            raise Exception("LemmyLib: Either community_id or name must be set")
+
+        return self.call_api(LemmyApiMethod.GET, f'community', params={'id': community_id, 'name': name})
+
     def remove_post(self, post_id: int, reason: str | None = None, removed: bool = True):
         self._logger.debug("LemmyLib remove_post")
 
@@ -187,8 +232,59 @@ class LemmyLib:
         return self.call_api(LemmyApiMethod.POST, f'comment/remove',
                              data={'reason': reason, 'comment_id': comment_id, 'removed': removed})
 
+    def update_comment(self, comment_id: int, content: str):
+        self._logger.debug("LemmyLib update_comment")
+
+        return self.call_api(LemmyApiMethod.PUT, f'comment/update',
+                             data={'comment_id': comment_id, 'content': content})
+
+    def update_post(self, post_id: int, content: str | None = None, nsfw: bool | None = None,
+                    title: str | None = None):
+        self._logger.debug("LemmyLib update_post")
+
+        if post_id is None:
+            raise Exception("LemmyLib: post_id must be set")
+
+        return self.call_api(LemmyApiMethod.PUT, f'post/update',
+                             data={'post_id': post_id, 'content': content, 'nsfw': nsfw, 'title': title})
+
+    def update_person(self, person_id: int, name: str | None = None, display_name: str | None = None,
+                      bio: str | None = None, matrix_user_id: str | None = None, avatar: str | None = None,
+                      banner: str | None = None, bot_account: bool | None = None):
+        """WARNING: This method is ONLY for updating the person's own profile! Or an exception will be thrown.
+        """
+        self._logger.debug("LemmyLib update_person")
+
+        if person_id is None:
+            raise Exception("LemmyLib: person_id must be set")
+
+        return self.call_api(LemmyApiMethod.PUT, f'user/save_user_settings',
+                             data={'person_id': person_id, 'name': name, 'display_name': display_name, 'bio': bio,
+                                   'matrix_user_id': matrix_user_id, 'avatar': avatar, 'banner': banner,
+                                   'bot_account': bot_account})
+
+    def ban_person(self, person_id: int, reason: str | None = None, ban_expires: str | None = None, banned: bool = True,
+                   remove_data: bool = False):
+        self._logger.debug("LemmyLib ban_person")
+
+        if person_id is None:
+            raise Exception("LemmyLib: person_id must be set")
+
+        return self.call_api(LemmyApiMethod.POST, f'user/ban',
+                             data={'reason': reason, 'person_id': person_id, 'ban_expires': ban_expires, 'ban': banned,
+                                   "remove_data": remove_data})
+
+    def remove_community(self, community_id: int, reason: str | None = None, removed: bool = True):
+        self._logger.debug("LemmyLib remove_community")
+
+        return self.call_api(LemmyApiMethod.POST, f'community/remove',
+                             data={'reason': reason, 'community_id': community_id, 'removed': removed})
+
     def remove_person(self, person_id: int, reason: str | None = None, removed: bool = True):
         self._logger.debug("LemmyLib remove_person")
+
+        if person_id is None:
+            raise Exception("LemmyLib: person_id must be set")
 
         return self.call_api(LemmyApiMethod.POST, f'person/remove',
                              data={'reason': reason, 'person_id': person_id, 'removed': removed})
