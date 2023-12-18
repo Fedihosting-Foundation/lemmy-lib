@@ -210,24 +210,21 @@ class LemmyLib:
                                                                       'user_name': user_name,
                                                                       'saved_only': saved_only})
 
-    def list_posts(self, page_cursor: int | None = None, sort: LemmyPostSort = None,
+    def list_posts(self,
+                   page: int | None = None, page_cursor: int | None = None, sort: LemmyPostSort = None,
                    listing_type: LemmyListingType = None,
-                   community_id: int | None = None, community_name: str | None = None, user_id: int | None = None,
+                   community_id: int | None = None, community_name: str | None = None,
                    liked_only: bool = False, disliked_only: bool = False,
-                   user_name: str | None = None, saved_only: bool = False):
+                   saved_only: bool = False):
         self._logger.debug("LemmyLib list_posts")
-
-        if community_id is None and community_name is None and user_id is None and user_name is None:
-            raise Exception("LemmyLib: Either community_id, community_name, user_id or user_name must be set")
 
         return self.call_api(LemmyApiMethod.GET, f'posts',
                              params={'page_cursor': page_cursor, 'sort': sort, 'type_': listing_type,
                                      'community_id': community_id,
+                                     'page': page,
                                      'community_name': community_name,
-                                     'user_id': user_id,
                                      'liked_only': liked_only,
                                      'disliked_only': disliked_only,
-                                     'user_name': user_name,
                                      'saved_only': saved_only})
 
     def get_person(self, person_id: int | None = None, username: str | None = None):
