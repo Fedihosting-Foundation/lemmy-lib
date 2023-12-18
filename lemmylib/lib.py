@@ -75,8 +75,6 @@ class LemmyLib:
             params = {}
         else:
             for key, value in params.copy().items():
-                print(value)
-                print(type(value))
                 if value is None:
                     params.pop(key)
                 if isinstance(value, bool):
