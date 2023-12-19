@@ -4,6 +4,8 @@ from enum import Enum
 
 import requests
 
+from lemmylib.entities.PersonEntity import PersonEntity
+
 if os.getenv("LOG_LEVEL") is None:
     logging.basicConfig(level=logging.DEBUG)
 else:
@@ -239,7 +241,10 @@ class LemmyLib:
         if person_id is None and username is None:
             raise Exception("LemmyLib: Either person_id or username must be set")
 
-        return self.call_api(LemmyApiMethod.GET, f'person', params={'person_id': person_id, 'username': username})
+        response = self.call_api(LemmyApiMethod.GET, f'person', params={'person_id': person_id, 'username': username})
+        if response is None:
+            return None
+        # TODO return a GetPersonResponseViewModel
 
     def get_community(self, community_id: int | None = None, name: str | None = None):
         self._logger.debug("LemmyLib get_community")
@@ -291,6 +296,19 @@ class LemmyLib:
                              data={'person_id': person_id, 'name': name, 'display_name': display_name, 'bio': bio,
                                    'matrix_user_id': matrix_user_id, 'avatar': avatar, 'banner': banner,
                                    'bot_account': bot_account})
+
+    def update_community(self, community_id: int, title: str | None = None, description: str | None = None,
+                         banner: str | None = None, icon: str | None = None,
+                         posting_restricted_to_mods: bool | None = None, nsfw: bool | None = None):
+        self._logger.debug("LemmyLib update_community")
+
+        if community_id is None:
+            raise Exception("LemmyLib: community_id must be set")
+
+        return self.call_api(LemmyApiMethod.PUT, f'community/update',
+                             data={'community_id': community_id, 'title': title, 'description': description,
+                                   'banner': banner, 'icon': icon, 'nsfw': nsfw,
+                                   'posting_restricted_to_mods': posting_restricted_to_mods})
 
     def ban_person(self, person_id: int, reason: str | None = None, ban_expires: str | None = None, banned: bool = True,
                    remove_data: bool = False):
