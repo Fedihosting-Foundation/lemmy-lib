@@ -188,10 +188,10 @@ class LemmyLib:
         return self.call_api(LemmyApiMethod.POST, f'admin/purge/comment',
                              data={'reason': reason, 'comment_id': comment_id})
 
-    def get_post(self, post_id: int):
+    def get_post(self, post_id: int, comment_id: int | None = None):
         self._logger.debug("LemmyLib get_post")
 
-        return self.call_api(LemmyApiMethod.GET, f'post', params={'id': post_id})
+        return self.call_api(LemmyApiMethod.GET, f'post', params={'id': post_id, 'comment_id': comment_id})
 
     def get_comment(self, comment_id: int):
         self._logger.debug("LemmyLib get_comment")
