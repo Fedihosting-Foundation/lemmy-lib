@@ -167,25 +167,25 @@ class LemmyLib:
     def purge_person(self, person_id: int, reason: str | None = None):
         self._logger.debug("LemmyLib purge_person")
 
-        return self.call_api(LemmyApiMethod.DELETE, f'admin/purge/person',
+        return self.call_api(LemmyApiMethod.POST, f'admin/purge/person',
                              data={'reason': reason, 'person_id': person_id})
 
     def purge_community(self, community_id: int, reason: str | None = None):
         self._logger.debug("LemmyLib purge_community")
 
-        return self.call_api(LemmyApiMethod.DELETE, f'admin/purge/community',
+        return self.call_api(LemmyApiMethod.POST, f'admin/purge/community',
                              data={'reason': reason, 'community_id': community_id})
 
     def purge_post(self, post_id: int, reason: str | None = None):
         self._logger.debug("LemmyLib purge_post")
 
-        return self.call_api(LemmyApiMethod.DELETE, f'admin/post/post',
+        return self.call_api(LemmyApiMethod.POST, f'admin/purge/post',
                              data={'reason': reason, 'post_id': post_id})
 
     def purge_comment(self, comment_id: int, reason: str | None = None):
         self._logger.debug("LemmyLib purge_comment")
 
-        return self.call_api(LemmyApiMethod.DELETE, f'admin/purge/comment',
+        return self.call_api(LemmyApiMethod.POST, f'admin/purge/comment',
                              data={'reason': reason, 'comment_id': comment_id})
 
     def get_post(self, post_id: int):
