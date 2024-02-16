@@ -3,40 +3,23 @@ import os
 from enum import Enum
 
 import requests
+from requests import JSONDecodeError
 
-from lemmylib.entities.PersonEntity import PersonEntity
+from lemmylib.enums.LemmyApiMethod import LemmyApiMethod
+from lemmylib.enums.LemmyListingType import LemmyListingType
+from lemmylib.enums.LemmyPostSort import LemmyPostSort
+from lemmylib.responses.GetPostResponse import GetPostResponse
 
 if os.getenv("LOG_LEVEL") is None:
     logging.basicConfig(level=logging.DEBUG)
 else:
     logging.basicConfig(level=int(os.getenv("LOG_LEVEL")))
 
-
-class LemmyApiMethod(Enum):
-    GET = 'GET'
-    POST = 'POST'
-    PUT = 'PUT'
-    DELETE = 'DELETE'
-
-
-class LemmyPostSort(Enum):
-    HOT = 'Hot'
-    ACTIVE = 'Active'
-    NEW = 'New'
-    OLD = 'Old'
-    TOP = 'Top'
-    CONTROVERSIAL = 'Controversial'
-    MOSTCOMMENTS = 'MostComments'
-    NEWCOMMENTS = 'NewComments'
-
-
-class LemmyListingType(Enum):
-    ALL = 'All'
-    LOCAL = 'Local'
-    SUBSCRIBED = 'Subscribed'
-
-
 API_VERSION = "v3"
+
+
+def get_base_path():
+    return f'/api/{API_VERSION}/'
 
 
 class LemmyLib:
@@ -87,7 +70,7 @@ class LemmyLib:
         if self._url is None:
             raise Exception("LemmyLib: URL not set")
 
-        url = f'{self._url}{self.get_base_path()}{endpoint}'
+        url = f'{self._url}{get_base_path()}{endpoint}'
 
         self._logger.debug(f"LemmyLib call_api: {method} {url}")
         with self.get_session(headers) as session:
@@ -105,15 +88,17 @@ class LemmyLib:
         self._logger.debug(f"LemmyLib call_api: {response.status_code} {response.text}")
 
         if response.ok:
-            return response
+            try:
+                return response.json()
+            except JSONDecodeError:
+                self._logger.error(f"LemmyLib call_api failed: {method} {url} {response.status_code} {response.text}")
+
+                return None
         else:
-            self._logger.error(f"LemmyLib call_api: "
+            self._logger.error(f"LemmyLib call_api failed: "
                                f"{method} {url}"
                                f"{response.status_code} {response.text}")
             return None
-
-    def get_base_path(self):
-        return f'/api/{API_VERSION}/'
 
     def set_jwt(self, jwt: str):
         self._jwt = jwt
@@ -149,7 +134,7 @@ class LemmyLib:
                                  data={'username_or_email': username, 'password': password, 'totp_2fa_token': totp})
 
         if not only_jwt:
-            self.set_jwt(response.json()["jwt"])
+            self.set_jwt(response['jwt'])
 
         return response
 
@@ -193,7 +178,12 @@ class LemmyLib:
     def get_post(self, post_id: int):
         self._logger.debug("LemmyLib get_post")
 
-        return self.call_api(LemmyApiMethod.GET, f'post', params={'id': post_id})
+        data = self.call_api(LemmyApiMethod.GET, f'post', params={'id': post_id})
+        if data is None:
+            return None
+
+        response = GetPostResponse(**data)
+        return response
 
     def get_comment(self, comment_id: int):
         self._logger.debug("LemmyLib get_comment")

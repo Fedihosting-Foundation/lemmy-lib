@@ -16,7 +16,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-
+trylib = "lemmylib.trylib:__main__"
 
 ######### BUILD TOOLING BELOW, IMPORTANT STUFF ABOVE ######################
 ###########################################################################
@@ -51,6 +51,7 @@ force_grid_wrap = 0
 use_parentheses = "True"
 line_length = 120
 profile = "black"
+add_imports = "from __future__ import annotations"
 
 [tool.tartufo]
 repo-path = "."

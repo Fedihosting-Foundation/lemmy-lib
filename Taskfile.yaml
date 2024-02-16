@@ -81,3 +81,8 @@ tasks:
     run:
       - task: build
       - docker-compose up
+
+    show_secrets:
+    - git secret reveal -f -v
+    save_secrets:
+    - git secret hide -m -d -v

@@ -1,4 +1,4 @@
-from typing import Optional, Any
+from typing import Any
 
 from lemmylib.models.BaseModel import BaseModel
 from lemmylib.models.PersonModel import PersonModel

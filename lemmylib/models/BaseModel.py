@@ -5,9 +5,7 @@ class BaseModel:
 
     def __init__(self, **data):
         for key, value in data.items():
-            if hasattr(self, key):
-                setattr(self, key, value)
-
+            setattr(self, key, value)
 
     def __getitem__(self, key: Any) -> Any:
         return self[key]

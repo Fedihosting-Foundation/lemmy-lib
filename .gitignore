@@ -133,3 +133,5 @@ dmypy.json
 .idea
 # Ignore YAML Templates
 *example.yaml
+.gitsecret/keys/random_seed
+!*.secret
