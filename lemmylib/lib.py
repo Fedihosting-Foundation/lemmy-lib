@@ -107,7 +107,7 @@ class LemmyLib:
         else:
             self._logger.error(f"LemmyLib call_api: "
                                f"{method} {url}"
-                               f"{response.status_code} {response.text}")
+                               f"{response.status_code}")
             return None
 
     def get_base_path(self):
