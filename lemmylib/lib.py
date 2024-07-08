@@ -107,7 +107,7 @@ class LemmyLib:
         else:
             self._logger.error(f"LemmyLib call_api: "
                                f"{method} {url}"
-                               f"{response.status_code} {response.text}")
+                               f"{response.status_code}")
             return None
 
     def get_base_path(self):
@@ -241,6 +241,15 @@ class LemmyLib:
 
         return self.call_api(LemmyApiMethod.GET, f'person', params={'person_id': person_id, 'username': username})
 
+    def get_private_messages(self, page: int = 1, limit: int = 20, creator_id: int | None = None,
+                             unread_only: bool = True):
+        self._logger.debug("LemmyLib get_private_message")
+
+        return self.call_api(LemmyApiMethod.GET, f'private_message/list', params={'page': page,
+                                                                                  'limit': limit,
+                                                                                  'creator_id': creator_id,
+                                                                                  'unread_only': unread_only})
+
     def get_community(self, community_id: int | None = None, name: str | None = None):
         self._logger.debug("LemmyLib get_community")
 
@@ -292,6 +301,12 @@ class LemmyLib:
                                    'matrix_user_id': matrix_user_id, 'avatar': avatar, 'banner': banner,
                                    'bot_account': bot_account})
 
+    def update_private_message(self, private_message_id: int, content: str | None = None):
+        self._logger.debug("LemmyLib update_private_message")
+
+        return self.call_api(LemmyApiMethod.PUT, f'private_message',
+                             data={'private_message_id': private_message_id, 'content': content})
+
     def ban_person(self, person_id: int, reason: str | None = None, ban_expires: str | None = None, banned: bool = True,
                    remove_data: bool = False):
         self._logger.debug("LemmyLib ban_person")
@@ -317,6 +332,18 @@ class LemmyLib:
 
         return self.call_api(LemmyApiMethod.POST, f'person/remove',
                              data={'reason': reason, 'person_id': person_id, 'removed': removed})
+
+    def delete_private_message(self, private_message_id: int, deleted: bool = True):
+        self._logger.debug("LemmyLib remove_private_message")
+
+        return self.call_api(LemmyApiMethod.POST, f'private_message/delete',
+                             data={'private_message_id': private_message_id, 'deleted': deleted})
+
+    def create_private_message(self, recipient_id: int, content: str):
+        self._logger.debug("LemmyLib create_private_message")
+
+        return self.call_api(LemmyApiMethod.POST, f'private_message',
+                             data={'recipient_id': recipient_id, 'content': content})
 
 
 if __name__ == '__main__':
