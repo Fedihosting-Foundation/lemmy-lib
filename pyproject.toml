@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "lemmylib"
-version = "0.0.16"
+version = "0.0.17"
 description = ""
 authors = ["Rooki <rooki@rooki.xyz>"]
 readme = "README.md"

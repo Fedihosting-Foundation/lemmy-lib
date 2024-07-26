@@ -345,6 +345,13 @@ class LemmyLib:
         return self.call_api(LemmyApiMethod.POST, f'private_message',
                              data={'recipient_id': recipient_id, 'content': content})
 
+    def create_comment(self, post_id: int, content: str, parent_id: int | None = None, language_id: int | None = None):
+        self._logger.debug("LemmyLib create_comment")
+
+        return self.call_api(LemmyApiMethod.POST, f'comment',
+                             data={'post_id': post_id, 'content': content, 'parent_id': parent_id,
+                                   'language_id': language_id})
+
 
 if __name__ == '__main__':
     print("This is a library, not a script.")
