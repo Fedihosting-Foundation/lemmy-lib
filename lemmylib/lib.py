@@ -105,7 +105,7 @@ class LemmyLib:
             return response
         else:
             self._logger.error(f"LemmyLib call_api: "
-                               f"{method} {url}"
+                               f"{method} {url} failed with status code "
                                f"{response.status_code}")
             return None
 
