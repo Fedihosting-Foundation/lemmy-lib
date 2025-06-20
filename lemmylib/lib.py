@@ -36,7 +36,6 @@ class LemmyListingType(Enum):
 
 API_VERSION = "v3"
 
-
 class LemmyLib:
     _jwt: str | None = None
     _url: str | None = None
@@ -100,7 +99,7 @@ class LemmyLib:
             else:
                 raise Exception("LemmyLib: Unknown method")
 
-        self._logger.debug(f"LemmyLib call_api: {response.status_code} {response.text}")
+        self._logger.debug(f"LemmyLib call_api: {response.status_code}")
 
         if response.ok:
             return response
